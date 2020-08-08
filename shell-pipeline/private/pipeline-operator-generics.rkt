@@ -77,9 +77,9 @@
 
   ;; For splitting macro to delimit pipeline segments
   (define-syntax-class -core-pipeline-op
-    (pattern op:id #:when (core-pipeline-op? (lookup #'op))))
+    (pattern op:id #:when (lookup #'op core-pipeline-op?)))
   (define-syntax-class -macro-pipeline-op
-    (pattern op:id #:when (macro-pipeline-op? (lookup #'op))))
+    (pattern op:id #:when (lookup #'op macro-pipeline-op?)))
 
   (define-syntax-class pipeline-op
     (pattern (~or _:-core-pipeline-op _:-macro-pipeline-op)))
