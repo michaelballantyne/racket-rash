@@ -96,17 +96,23 @@
       [(op:-core-pipeline-op arg ...)
        (core-pipeline-starter (lookup #'op) stx)]
       [(op:-macro-pipeline-op arg ...)
+       (define binding (lookup #'op))
        (expand-pipeline-starter
-        (macro-pipeline-starter (lookup #'op)
-                                stx))]
+        (apply-as-transformer (lambda (stx) (macro-pipeline-starter binding stx))
+                              #'op
+                              'expression
+                              stx))]
       [else (error 'expand-pipeline-starter "not a pipeline starter ~a\n" stx)]))
   (define/hygienic (expand-pipeline-joint stx) #:definition
     (syntax-parse stx
       [(op:-core-pipeline-op arg ...)
        (core-pipeline-joint (lookup #'op) stx)]
       [(op:-macro-pipeline-op arg ...)
+       (define binding (lookup #'op))
        (expand-pipeline-joint
-        (macro-pipeline-joint (lookup #'op)
+        (apply-as-transformer (lambda (stx) (macro-pipeline-joint binding stx))
+                              #'op
+                              'expression
                               stx))]
       [else (error 'expand-pipeline-joint "not a pipeline joint ~a\n" stx)]))
   )
